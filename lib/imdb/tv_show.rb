@@ -3,6 +3,10 @@ module Imdb
 
     def initialize(imdb_id, title = nil, also_known_as = [])
       super(imdb_id, title, also_known_as)
+      seasons_count.downto(1) do |n|
+        self.class.__send__(:attr_accessor, "load_season_#{n}")
+        self.__send__("load_season_#{n}=", OpenStruct.new)
+      end
     end
 
     def is_a_tvshow?
