@@ -5,7 +5,7 @@ module Imdb
       super(imdb_id, title, also_known_as)
       seasons_count.downto(1) do |n|
         self.class.send(:attr_accessor, "load_season_#{n}")
-        self.send("load_season_#{n}=", Imdb::Season.new(imdb_id, "#{season_url(n)}"))
+        self.send("load_season_#{n}=", Imdb::Season.new(imdb_id, "#{season_url(n)}", n))
       end
       return self
     end
