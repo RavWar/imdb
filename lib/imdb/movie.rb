@@ -15,7 +15,7 @@ module Imdb
     def initialize(imdb_id, title = nil, also_known_as = [])
       @id = imdb_id
       @url = "http://akas.imdb.com/title/tt#{imdb_id}/combined"
-      @title = title.gsub(/"/, "") if title
+      @title = title
       @also_known_as = also_known_as
     end
 
@@ -115,7 +115,7 @@ module Imdb
       if @title && !force_refresh
         @title
       else
-        @title = document.at("h1").innerHTML.split('<span').first.strip.imdb_unescape_html rescue nil
+        @title = document.at("h1").innerHTML.split('<span').first.strip.imdb_unescape_html.gsub(/"/, '') rescue nil
       end
     end
 
