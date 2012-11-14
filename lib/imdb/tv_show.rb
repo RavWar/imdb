@@ -3,11 +3,15 @@ module Imdb
 
     def initialize(imdb_id, title = nil, also_known_as = [])
       super(imdb_id, title, also_known_as)
-      seasons_count.downto(1) do |n|
-        self.class.send(:attr_accessor, "load_season_#{n}")
-        self.send("load_season_#{n}=", Imdb::Season.new(imdb_id, "#{season_url(n)}", n))
-      end
-      return self
+      # seasons_count.downto(1) do |n|
+      #   self.class.send(:attr_accessor, "season_#{n}")
+      #   self.send("season_#{n}=", Imdb::Season.new(imdb_id, "#{season_url(n)}", n))
+      # end
+    end
+
+    def season(number)
+      raise "There are only #{seasons_count} seasons in this tv-show" if number > seasons_count
+      Imdb::Season.new(@id, season_url(number), number)
     end
 
     def is_a_tvshow?
@@ -19,19 +23,9 @@ module Imdb
       @seasons_count.delete_if {|el| el.inner_html == 'unknown' }.count
     end
 
-    def season_url(season_number)
-      raise "There are only #{@seasons_count} seasons in this tv-show" if season_number > seasons_count
-      @season_url = "http://www.imdb.com/title/tt#{id}/episodes?season=#{season_number}"
-    end
-
-    private
-
-    def method_missing(method_name, *args, &block)
-      if method_name.to_s =~ /^season_(\d{1,2})/
-        season_url($1.to_i)
-      else
-        super
-      end
+    def season_url(number)
+      raise "There are only #{seasons_count} seasons in this tv-show" if number > seasons_count
+      @season_url = "http://www.imdb.com/title/tt#{id}/episodes?season=#{number}"
     end
 
   end
