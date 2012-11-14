@@ -40,7 +40,7 @@ module Imdb
     private
 
     def containing_div(episode_number)
-      document.search("div[@class='list detail eplist']//div[@class*='list_item']")[episode_number-1]
+      document.search("meta[@itemprop='episodeNumber'][@content='#{episode_number}']/../..div[@class*='list_item'")
     end
 
   end
