@@ -17,30 +17,8 @@ module Imdb
       @document ||= Hpricot(open(@url))
     end
 
-    def episode_info(episode_number)
-      Imdb::Episode.new(@season_number, episode_number,  episode_title(episode_number), episode_airdate(episode_number),
-        episode_plot(episode_number))
-    end
-
-    def episode_airdate(episode_number)
-      raise "There are only #{episodes_count} episodes in this season" if episode_number > episodes_count
-      containing_div(episode_number).search("//div[@class='airdate']")
-        .inner_html
-        .strip.imdb_unescape_html rescue 'not found'
-    end
-
-    def episode_plot(episode_number)
-      containing_div(episode_number).search("//div[@class='item_description']").inner_html.strip
-    end
-
-    def episode_title(episode_number)
-      containing_div(episode_number).search("//a[itemprope='name'").inner_html.strip rescue 'not found'
-    end
-
-    private
-
-    def containing_div(episode_number)
-      document.search("meta[@itemprop='episodeNumber'][@content='#{episode_number}']/../..div[@class*='list_item'")
+    def episode(number)
+      Imdb::Episode.new(@url, @season_number, number)
     end
 
   end
