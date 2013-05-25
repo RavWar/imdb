@@ -10,7 +10,7 @@ module Imdb
     end
 
     def episodes_count
-      @episodes_count ||= document.at("div[@class='list detail eplist']//div[@class*='list_item']").count
+      @episodes_count ||= document.search("div[@class='list detail eplist']//div[@class*='list_item']").count
     end
 
     def episode number
@@ -25,7 +25,7 @@ module Imdb
     end
 
     def containing_div_for_episode number
-      @containing_div ||= document.at("meta[@itemprop='episodeNumber'][@content='#{number}']/../..div[@class*='list_item'")
+      @containing_div ||= document.at("//meta[@itemprop='episodeNumber'][@content='#{number}']/ancestor::div[2]")
     end
 
   end
