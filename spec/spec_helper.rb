@@ -8,13 +8,7 @@
 # no changes to the IMDB.com interface have affected the parser.
 ###
 
-begin
-  require 'spec'
-rescue LoadError
-  require 'rubygems'
-  gem 'rspec'
-  require 'spec'
-end
+require 'rspec'
 
 $:.unshift(File.dirname(__FILE__) + '/../lib')
 require 'imdb'
@@ -23,13 +17,15 @@ def read_fixture(path)
   File.read(File.expand_path(File.join(File.dirname(__FILE__), "fixtures", path)))
 end
 
-IMDB_SAMPLES = { 
+IMDB_SAMPLES = {
   "http://akas.imdb.com:80/find?q=Kannethirey+Thondrinal;s=tt" => "search_kannethirey_thondrinal",
   "http://akas.imdb.com/title/tt0330508/?fr=c2M9MXxsbT01MDB8ZmI9dXx0dD0xfG14PTIwfGh0bWw9MXxjaD0xfGNvPTF8cG49MHxmdD0xfGt3PTF8cXM9S2FubmV0aGlyZXkgVGhvbmRyaW5hbHxzaXRlPWFrYXxxPUthbm5ldGhpcmV5IFRob25kcmluYWx8bm09MQ__;fc=1;ft=1" => "tt0330508",
   "http://akas.imdb.com:80/find?q=I+killed+my+lesbian+wife;s=tt" => "search_killed_wife",
-  "http://akas.imdb.com:80/find?q=Star+Trek;s=tt" => "search_star_trek",
+  "http://akas.imdb.com/find?q=Star+Trek%3A+TOS;s=tt" => "search_star_trek",
   "http://akas.imdb.com:80/title/tt0117731/combined" => "tt0117731",
   "http://akas.imdb.com:80/title/tt0095016/combined" => "tt0095016",
+  "http://akas.imdb.com/title/tt0095016/synopsis" => "synopsis",
+  "http://akas.imdb.com/title/tt0095016/plotsummary" => "plotsummary",
   "http://akas.imdb.com:80/title/tt0242653/combined" => "tt0242653",
   "http://akas.imdb.com/title/tt0166222/?fr=c2M9MXxsbT01MDB8ZmI9dXx0dD0xfG14PTIwfGh0bWw9MXxjaD0xfGNvPTF8cG49MHxmdD0xfGt3PTF8cXM9SSBraWxsZWQgbXkgbGVzYmlhbiB3aWZlfHNpdGU9YWthfHE9SSBraWxsZWQgbXkgbGVzYmlhbiB3aWZlfG5tPTE_;fc=1;ft=7" => "tt0166222",
   "http://akas.imdb.com:80/chart/top" => "top_250",
@@ -39,13 +35,16 @@ IMDB_SAMPLES = {
   "http://akas.imdb.com/title/tt0036855/combined" => "tt0036855",
   "http://akas.imdb.com/title/tt0110912/combined" => "tt0110912",
   "http://akas.imdb.com/title/tt0468569/combined" => "tt0468569",
+  "http://akas.imdb.com/title/tt1520211/combined" => "tt1520211",
+  "http://akas.imdb.com/title/tt1520211/episodes?season=1" => "thewalkingdead-s1",
+  "http://akas.imdb.com/title/tt1628064/combined" => "thewalkingdead-s1e2"
 }
 
 unless ENV['LIVE_TEST']
   begin
     require 'rubygems'
     require 'fakeweb'
-    
+
     FakeWeb.allow_net_connect = false
     IMDB_SAMPLES.each do |url, response|
       FakeWeb.register_uri(:get, url, :response => read_fixture(response))
