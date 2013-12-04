@@ -11,15 +11,15 @@ module Imdb
     end
 
     def airdate
-      @containing_div.at("//div[@class='airdate']").inner_html.strip rescue nil
+      @containing_div.at("div[@class='airdate']").text.strip rescue nil
     end
 
     def plot
-      @containing_div.at("//div[@class='item_description']").inner_html.strip rescue nil
+      @containing_div.at("div[@class='item_description']").text.strip rescue nil
     end
 
     def title
-      @containing_div.at("//a[@itemprop='name']").inner_html.strip rescue nil
+      @containing_div.at("a[@itemprop='name']").text.strip rescue nil
     end
 
     private
