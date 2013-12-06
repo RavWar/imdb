@@ -15,7 +15,8 @@ module Imdb
     end
 
     def plot
-      @containing_div.at("div[@class='item_description']").text.strip rescue nil
+      plot = @containing_div.at("div[@class='item_description']").text.strip rescue nil
+      plot.include?('Add a plot') ? nil : plot
     end
 
     def title
