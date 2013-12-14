@@ -1,6 +1,5 @@
 module Imdb
   class Episode
-
     attr_reader :containing_div, :url, :season, :number, :title, :airdate, :plot
 
     def initialize containing_div, url, season, number
@@ -16,7 +15,7 @@ module Imdb
 
     def plot
       plot = @containing_div.at("div[@class='item_description']").text.strip rescue nil
-      plot.include?('Add a plot') ? nil : plot
+      plot.downcase.include?('add a plot') ? nil : plot
     end
 
     def title
@@ -28,6 +27,5 @@ module Imdb
     def document
       @document ||= Nokogiri::HTML open @url
     end
-
   end
 end
