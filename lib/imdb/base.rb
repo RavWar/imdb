@@ -1,6 +1,8 @@
 module Imdb
+  def self.fetch(url)
+    open(url, { 'Accept-Language' => 'en' })
+  end
 
-  # Represents something on IMDB.com
   class Base
     attr_accessor :id, :url, :title, :also_known_as
 
@@ -12,9 +14,9 @@ module Imdb
     # will be performed when a new object is created. Only when you use an
     # accessor that needs the remote data, a HTTP request is made (once).
     #
-    def initialize imdb_id, title = nil, also_known_as = []
+    def initialize(imdb_id, title = nil, also_known_as = [])
       @id    = imdb_id
-      @url   = "http://akas.imdb.com/title/tt#{imdb_id}/combined"
+      @url   = "http://imdb.com/title/tt#{imdb_id}/combined"
       @title = title
       @also_known_as = also_known_as
     end
@@ -92,7 +94,7 @@ module Imdb
 
     def plot_summary
       doc = Nokogiri::HTML(Imdb::Movie.find_by_id(@id, :plotsummary))
-      doc.at("p.plotpar").inner_html.gsub(/<i.*/im, '').strip.imdb_unescape_html rescue nil
+      doc.at("p.plotSummary").text.strip rescue nil
     end
 
     # Returns a string containing the URL to the movie poster.
@@ -118,7 +120,7 @@ module Imdb
 
     # Returns a string containing the tagline
     def tagline
-      document.search("h5[text()='Tagline:'] ~ div").first.inner_html.gsub(/<.+>.+<\/.+>/, '').strip.imdb_unescape_html rescue nil
+      document.search("h5[text()='Tagline:'] ~ div").first.text rescue nil
     end
 
     # Returns a string containing the mpaa rating and reason for rating
@@ -131,7 +133,7 @@ module Imdb
       if @title && !force_refresh
         @title
       else
-        @title = document.at("h1").inner_html.split('<span').first.strip.imdb_unescape_html.gsub(/"/, '').strip rescue nil
+        @title = document.at("h1").text rescue nil
       end
     end
 
@@ -149,21 +151,12 @@ module Imdb
 
     # Returns a new Nokogiri document for parsing.
     def document
-      @document ||= Nokogiri::HTML(Imdb::Movie.find_by_id(@id))
+      @document ||= Nokogiri::HTML Imdb::Movie.find_by_id(@id)
     end
 
     # Use HTTParty to fetch the raw HTML for this movie.
     def self.find_by_id(imdb_id, page = :combined)
-      open("http://akas.imdb.com/title/tt#{imdb_id}/#{page}")
-    end
-
-    # Convenience method for search
-    def self.search(query)
-      Imdb::Search.new(query).movies
-    end
-
-    def self.top_250
-      Imdb::Top250.new.movies
+      Imdb.fetch("http://imdb.com/title/tt#{imdb_id}/#{page}")
     end
 
     def sanitize_plot(the_plot)
@@ -177,7 +170,5 @@ module Imdb
     def sanitize_release_date(the_release_date)
       the_release_date.gsub(/see|more|\u00BB|\u00A0/i, "").strip
     end
-
-  end # Movie
-
-end # Imdb
+  end
+end

@@ -3,7 +3,7 @@ module Imdb
 
     attr_reader :show_id, :url, :season_number
 
-    def initialize show_id, url, season_number
+    def initialize(show_id, url, season_number)
       @show_id = show_id
       @url = url
       @season_number = season_number
@@ -13,7 +13,7 @@ module Imdb
       @episodes_count ||= document.search("div[@class='list detail eplist']//div[@class*='list_item']").count
     end
 
-    def episode number
+    def episode(number)
       raise "There is no #{number} episode in this season" if number > episodes_count
       @episode ||= Imdb::Episode.new(containing_div_for_episode(number), @url, @season_number, number)
     end
@@ -21,10 +21,10 @@ module Imdb
     private
 
     def document
-      @document ||= Nokogiri::HTML open @url
+      @document ||= Nokogiri::HTML Imdb.fetch @url
     end
 
-    def containing_div_for_episode number
+    def containing_div_for_episode(number)
       @containing_div ||= document.at("//meta[@itemprop='episodeNumber'][@content='#{number}']/ancestor::div[2]")
     end
 

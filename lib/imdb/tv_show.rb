@@ -1,11 +1,14 @@
 module Imdb
-  class TvShow < Movie
+  class TvShow < Base
+    extend Imdb::Search
 
-    def initialize imdb_id, title = nil, also_known_as = []
+    SEARCH_URL = "http://akas.imdb.com/find?&s=tt&ttype=tv&q=".freeze
+
+    def initialize(imdb_id, title = nil, also_known_as = [])
       super imdb_id, title, also_known_as
     end
 
-    def season number
+    def season(number)
       raise "There are only #{seasons_count} seasons in this tv-show" if number > seasons_count
       Imdb::Season.new @id, season_url(number), number
     end
@@ -19,10 +22,9 @@ module Imdb
       @seasons_count.to_a.delete_if{|el| el.inner_html == 'unknown' }.count
     end
 
-    def season_url number
+    def season_url(number)
       raise "There are only #{seasons_count} seasons in this tv-show" if number > seasons_count
       @season_url = "http://www.imdb.com/title/tt#{id}/episodes?season=#{number}"
     end
-
   end
 end

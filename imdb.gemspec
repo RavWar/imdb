@@ -25,5 +25,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec', '~> 2.13.0'
   s.add_development_dependency 'gokdok'
   s.add_development_dependency 'rdoc', '~> 4.0'
-  s.add_development_dependency 'fakeweb'
+  s.add_development_dependency 'vcr'
+  s.add_development_dependency 'webmock'
 end

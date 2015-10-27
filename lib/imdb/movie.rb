@@ -1,7 +1,8 @@
 module Imdb
-
-  # Represents a Movie on IMDB.com
   class Movie < Base
-  end # Movie
+    extend Imdb::Search
 
-end # Imdb
+    # Use akas due to query param escaping difference on imdb side
+    SEARCH_URL = "http://akas.imdb.com/find?&s=tt&ttype=ft&q=".freeze
+  end
+end
