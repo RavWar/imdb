@@ -58,7 +58,7 @@ describe "Imdb::Movie", vcr: { cassette_name: 'movie' } do
 
     it "returns the url to the movie trailer" do
       @movie.trailer_url.should be_an(String)
-      @movie.trailer_url.should == 'http://imdb.com/video/screenplay/vi782369049/'
+      @movie.trailer_url.should == 'http://www.imdb.com/video/screenplay/vi782369049/'
     end
 
     it "should find the director" do
