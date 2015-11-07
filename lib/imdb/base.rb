@@ -133,8 +133,8 @@ module Imdb
       if @title && !force_refresh
         @title
       else
-        @title = document.at("h1").text rescue nil
-      end
+        @title = document.at("h1").inner_html.split('<span').first.strip.gsub(/"/, '')
+      end rescue nil
     end
 
     # Returns an integer containing the year (CCYY) the movie was released in.
