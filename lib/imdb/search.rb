@@ -18,19 +18,13 @@ module Imdb
     private
 
     def parse_movie(doc)
-      id    = doc.at("head/link[@rel='canonical']")['href'][/\d+/]
-      title = doc.at("h1").text
-
-      [new(id, title)]
+      id = doc.at("head/link[@rel='canonical']")['href'][/\d+/]
+      [new(id)]
     end
 
     def parse_movies(doc)
       doc.search(".titleColumn a, .result_text a").map do |element|
-        id = element['href'][/\d+/]
-        title = element.text
-        title = title.split(/\saka\s/).shift.strip
-
-        [id, title]
+        element['href'][/\d+/] # ID
       end.uniq.map do |values|
         new(*values)
       end
