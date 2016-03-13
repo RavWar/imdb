@@ -71,6 +71,11 @@ module Imdb
       document.search("h5[text()='Country:'] ~ div a[@href*='/country/']").map { |link| link.content.strip } rescue []
     end
 
+    # Returns an array of countries as iso-strings.
+    def iso_countries
+      document.search("h5[text()='Country:'] ~ div a[@href*='/country/']/@href").map { |href| href.value.match(/\/country\/(.{2})/)[1].upcase } rescue []
+    end
+
     # Returns the duration of the movie in minutes as an integer.
     def length
       document.at("h5[text()='Runtime:'] ~ div").content[/\d+ min/].to_i rescue nil
