@@ -139,7 +139,7 @@ module Imdb
       if @title && !force_refresh
         @title
       else
-        @title = document.at("h1").inner_html.split('<span').first.strip.gsub(/"/, '')
+        @title = CGI.unescapeHTML(document.at("h1").inner_html.split('<span').first.strip.gsub(/"/, '')) rescue nil
       end rescue nil
     end
 
