@@ -115,7 +115,8 @@ module Imdb
 
     # Returns a float containing the average user rating
     def rating
-     document.at_css('.starbar-meta b').text.to_f
+      doc = Nokogiri::HTML(Imdb::Movie.find_by_id(@id, :ratings))
+      doc.at_css('.ratings-imdb-rating span')&.text&.to_f
     end
 
     # Returns an int containing the number of user ratings
