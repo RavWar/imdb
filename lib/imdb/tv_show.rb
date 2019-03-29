@@ -4,10 +4,6 @@ module Imdb
 
     SEARCH_URL = "http://akas.imdb.com/find?&s=tt&ttype=tv&q=".freeze
 
-    def initialize(imdb_id, title = nil, also_known_as = [])
-      super imdb_id, title, also_known_as
-    end
-
     def season(number)
       raise "There are only #{seasons_count} seasons in this tv-show" if number > seasons_count
       Imdb::Season.new @id, season_url(number), number

@@ -4,7 +4,7 @@ module Imdb
   end
 
   class Base
-    attr_accessor :id, :url, :title, :also_known_as
+    attr_accessor :id, :type, :url, :title, :also_known_as
 
     # Initialize a new IMDB movie object with it's IMDB id (as a String)
     #
@@ -14,8 +14,9 @@ module Imdb
     # will be performed when a new object is created. Only when you use an
     # accessor that needs the remote data, a HTTP request is made (once).
     #
-    def initialize(imdb_id, title = nil, also_known_as = [])
+    def initialize(imdb_id, imdb_type = nil, title = nil, also_known_as = [])
       @id    = imdb_id
+      @type  = imdb_type
       @url   = "http://www.imdb.com/title/tt#{imdb_id}/combined"
       @title = title
       @also_known_as = also_known_as
