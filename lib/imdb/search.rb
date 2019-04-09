@@ -24,9 +24,13 @@ module Imdb
 
     def parse_movies(doc)
       doc.search(".titleColumn a, .result_text a").map do |element|
-        element['href'][/\d+/] # ID
-      end.uniq.map do |values|
-        new(*values)
+        {
+          id: element['href'][/\d+/],
+          # extract type, which always contains more than 4 chars (e.g. '(I) (2004) (TV Series)')
+          type: element.next.content.scan(/\((.*?)\)/).flatten.reverse.find { |v| v.length > 4 },
+        }
+      end.uniq{ |v| v[:id] }.map do |hash|
+        new(*hash.values)
       end
     end
   end

@@ -8,6 +8,7 @@ require 'cgi'
 
 require 'imdb/base'
 require 'imdb/search'
+require 'imdb/all'
 require 'imdb/movie'
 require 'imdb/tv_show'
 require 'imdb/season'
