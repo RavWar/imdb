@@ -14,8 +14,7 @@ module Imdb
     end
 
     def seasons_count
-      @seasons_count ||= document.css("a[@href*='episodes?season=']")
-      @seasons_count.to_a.delete_if{|el| el.inner_html == 'unknown' }.count
+      @seasons_count ||= document.css("a[@href*='episodes?season=']").first.text.to_i rescue nil
     end
 
     def season_url(number)
