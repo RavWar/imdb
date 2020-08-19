@@ -12,7 +12,7 @@ module Imdb
     end
 
     def top250
-      parse_movies Nokogiri::HTML Imdb.fetch "http://www.imdb.com/chart/top"
+      parse_movies Nokogiri::HTML Imdb.fetch "https://imdb.com/chart/top"
     end
 
     private

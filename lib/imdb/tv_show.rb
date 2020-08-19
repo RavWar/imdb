@@ -2,7 +2,7 @@ module Imdb
   class TvShow < Base
     extend Imdb::Search
 
-    SEARCH_URL = "http://akas.imdb.com/find?&s=tt&ttype=tv&q=".freeze
+    SEARCH_URL = "https://imdb.com/find?&s=tt&ttype=tv&q=".freeze
 
     def season(number)
       raise "There are only #{seasons_count} seasons in this tv-show" if number > seasons_count
@@ -19,7 +19,7 @@ module Imdb
 
     def season_url(number)
       raise "There are only #{seasons_count} seasons in this tv-show" if number > seasons_count
-      @season_url = "http://www.imdb.com/title/tt#{id}/episodes?season=#{number}"
+      @season_url = "https://imdb.com/title/tt#{id}/episodes?season=#{number}"
     end
   end
 end

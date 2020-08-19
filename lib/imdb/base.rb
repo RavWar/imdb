@@ -17,7 +17,7 @@ module Imdb
     def initialize(imdb_id, imdb_type = nil, title = nil, also_known_as = [])
       @id    = imdb_id
       @type  = imdb_type
-      @url   = "http://www.imdb.com/title/tt#{imdb_id}/combined"
+      @url   = "https://imdb.com/title/tt#{imdb_id}/reference"
       @title = title
       @also_known_as = also_known_as
     end
@@ -54,7 +54,7 @@ module Imdb
 
     # Returns the url to the "Watch a trailer" page
     def trailer_url
-      'http://www.imdb.com' + document.at("a[@href*='/video/screenplay/']")["href"] rescue nil
+      'https://imdb.com' + document.at("a[@href*='/video/screenplay/']")["href"] rescue nil
     end
 
     # Returns an array of genres (as strings)
@@ -162,8 +162,8 @@ module Imdb
     end
 
     # Use HTTParty to fetch the raw HTML for this movie.
-    def self.find_by_id(imdb_id, page = :combined)
-      Imdb.fetch("http://www.imdb.com/title/tt#{imdb_id}/#{page}")
+    def self.find_by_id(imdb_id, page = :reference)
+      Imdb.fetch("https://imdb.com/title/tt#{imdb_id}/#{page}")
     end
 
     def sanitize_plot(the_plot)
